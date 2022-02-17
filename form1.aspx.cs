@@ -4,11 +4,13 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
+using tcdog.Entities;
 namespace tcdog
 {
     public partial class form1 : System.Web.UI.Page
     {
+        Person person = new Person();
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -16,27 +18,18 @@ namespace tcdog
 
         protected void Button1_Click(object sender, EventArgs e)
         {
-            string ad, soyad;
-            long tckn;
-            int DY;
-            ad= TxtKullaniciAdi.Text;
-            soyad = TextBox2.Text;
-            tckn = long.Parse(TextBox3.Text);
-            DY = Convert.ToInt32(TextBox1.Text);
+            person.Name = TxtKullaniciAdi.Text;
+            person.Surname = TextBox2.Text;
+            person.DogumYili = Convert.ToInt32(TextBox3.Text);
+            person.TCKN = long.Parse(TextBox1.Text);
 
-           KimlikDogrulama.KPSPublicSoapClient KK =new KimlikDogrulama.KPSPublicSoapClient();
-           bool durum = KK.TCKimlikNoDogrula(tckn,ad,soyad,DY);
-            if(durum==true)
-            {
+
+            KimlikDogrulama.KPSPublicSoapClient KK = new KimlikDogrulama.KPSPublicSoapClient();
+            bool durum = KK.TCKimlikNoDogrula(person.TCKN, person.Name, person.Surname, person.DogumYili);
+            if (durum == true)
                 Label1.Text = "dogrulandı";
-            }
-            if(durum==false)
-            {
-                Label1.Text="dogrulanmadi";
-            }
-
-
-
+            else
+                Label1.Text = "Doğrulanmadı.";
         }
     }
 }
